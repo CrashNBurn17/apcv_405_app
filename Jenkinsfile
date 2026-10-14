@@ -3,7 +3,7 @@ pipeline {
 
     environment {
         IMAGE_NAME = 'kclemenz/apcv-405-app'
-        CONTAINER_NAME = 'apcv-405-container'
+        PATH+DOCKER = 'C:\\Users\\adrum\\AppData\\Local\\Programs\\DockerDesktop\\resources\\bin'
     }
 
     stages {
