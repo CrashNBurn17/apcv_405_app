@@ -42,7 +42,7 @@ pipeline {
             	    bat '''
                		@echo off
 			set "DOCKER_EXE=C:\\Users\\adrum\\AppData\\Local\\Programs\\DockerDesktop\\resources\\bin\\docker.exe"
-                	echo %DOCKER_TOKEN% | "%DOCKER_EXE%" login -u %DOCKER_USER% --password-stdin
+                	powershell -NoProfile -Command "$env:DOCKER_TOKEN | & $env:DOCKER_EXE login -u $env:DOCKER_USER --password-stdin"
 			if errorlevel 1 exit /b 1
                 	"%DOCKER_EXE%" push %IMAGE_NAME%:latest
             	    '''
