@@ -2,8 +2,8 @@ pipeline {
     agent any
 
     environment {
-        IMAGE_NAME = 'kclemenz/apcv-405-app'
-        "PATH+DOCKER" = 'C:\\Users\\adrum\\AppData\\Local\\Programs\\DockerDesktop\\resources\\bin'
+        IMAGE_NAME = 'kclemenz/apcv-405-app'bin'
+        CONTAINER_NAME = 'apcv-405-container'
     }
 
     stages {
@@ -23,11 +23,12 @@ pipeline {
         stage('Build Docker Image') {
     	    steps {
         	bat '''
-            	@echo off
-            	set "PATH=C:\\Users\\adrum\\AppData\\Local\\Programs\\DockerDesktop\\resources\\bin;%PATH%"
-            	docker --version
-            	docker build -t %IMAGE_NAME%:latest .
-            '''
+            	    @echo off
+            	    "C:\\Users\\adrum\\AppData\\Local\\Programs\\DockerDesktop\\resources\\bin\\docker.exe" --version
+		    "C:\\Users\\adrum\\AppData\\Local\\Programs\\DockerDesktop\\resources\\bin\\docker.exe" info
+		    "C:\\Users\\adrum\\AppData\\Local\\Programs\\DockerDesktop\\resources\\bin\\docker.exe" build -t %IMAGE_NAME%:latest .
+            	
+                '''
     	    }
 	}
 
@@ -37,16 +38,17 @@ pipeline {
             	    credentialsId: 'dockerhub-credentials',
             	    usernameVariable: 'DOCKER_USER',
             	    passwordVariable: 'DOCKER_TOKEN'
-        	)]) {
-            	bat '''
-               	@echo off
-		set "PATH=C:\\Users\\adrum\\AppData\\Local\\Programs\\DockerDesktop\\resources\\bin;%PATH%"
-                echo %DOCKER_TOKEN% | docker login -u %DOCKER_USER% --password-stdin
-                docker push %IMAGE_NAME%:latest
-            '''
-            }
-    	}
-    }
+                )]) {
+            	    bat '''
+               		@echo off
+			set "DOCKER_EXE=C:\\Users\\adrum\\AppData\\Local\\Programs\\DockerDesktop\\resources\\bin\\docker.exe"
+                	echo %DOCKER_TOKEN% | "%DOCKER_EXE%" login -u %DOCKER_USER% --password-stdin
+			if errorlevel 1 exit /b 1
+                	"%DOCKER_EXE%" push %IMAGE_NAME%:latest
+            	    '''
+                }
+    	     }
+         }
 
         stage('Run Docker Container') {
             steps {
