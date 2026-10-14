@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     environment {
-        IMAGE_NAME = 'kclemenz/apcv-405-app'bin'
+        IMAGE_NAME = 'kclemenz/apcv-405-app'
         CONTAINER_NAME = 'apcv-405-container'
     }
 
