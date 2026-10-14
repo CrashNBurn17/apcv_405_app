@@ -40,6 +40,7 @@ pipeline {
         	)]) {
             	bat '''
                	@echo off
+		set "PATH=C:\\Users\\adrum\\AppData\\Local\\Programs\\DockerDesktop\\resources\\bin;%PATH%"
                 echo %DOCKER_TOKEN% | docker login -u %DOCKER_USER% --password-stdin
                 docker push %IMAGE_NAME%:latest
             '''
