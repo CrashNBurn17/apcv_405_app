@@ -54,8 +54,9 @@ pipeline {
             steps {
                 bat '''
 		    set "DOCKER_EXE=C:\\Users\\adrum\\AppData\\Local\\Programs\\DockerDesktop\\resources\\bin\\docker.exe"
-                    docker rm -f %CONTAINER_NAME% 2>NUL
-                    docker run -d -p 9090:8080 --name %CONTAINER_NAME% -e ASPNETCORE_URLS=http://+:8080 %IMAGE_NAME%:latest
+                    "%DOCKER_EXE%" rm -f %CONTAINER_NAME% 2>NUL
+                    "%DOCKER_EXE%" run -d -p 9090:8080 --name %CONTAINER_NAME% -e ASPNETCORE_URLS=http://+:8080 %IMAGE_NAME%:latest
+		    if errorlevel 1 exit /b 1
                 '''
             }
         }
