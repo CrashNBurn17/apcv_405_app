@@ -21,26 +21,31 @@ pipeline {
         }
 
         stage('Build Docker Image') {
-            steps {
-                bat 'docker build -t %IMAGE_NAME%:latest .'
-            }
-        }
+    	    steps {
+        	bat '''
+            	@echo off
+            	set "PATH=C:\\Users\\adrum\\AppData\\Local\\Programs\\DockerDesktop\\resources\\bin;%PATH%"
+            	docker --version
+            	docker build -t %IMAGE_NAME%:latest .
+            '''
+    	    }
+	}
 
 	stage('Push Docker Image') {
-	    steps {
-		withCredentials([usernamePassword(
-		    credentialsId: 'dockerhub-credentials',
-		    usernameVariable: 'DOCKER_USER',
-		    passwordVariable: 'DOCKER_TOKEN'
-		)]) {
-		    bat '''
-			@echo off
-			echo %DOCKER_TOKEN% | docker login -u %DOCKER_USER% --password-stdin
-			docker push %IMAGE_NAME%:latest
-	            '''
-		}
-	     }
-	  }
+    	    steps {
+       	 	withCredentials([usernamePassword(
+            	credentialsId: 'dockerhub-credentials',
+            	usernameVariable: 'DOCKER_USER',
+            	passwordVariable: 'DOCKER_TOKEN'
+        	)]) {
+            	bat '''
+               	@echo off
+                echo %DOCKER_TOKEN% | docker login -u %DOCKER_USER% --password-stdin
+                docker push %IMAGE_NAME%:latest
+            '''
+            }
+    	}
+    }
 
         stage('Run Docker Container') {
             steps {
